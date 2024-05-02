@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,7 +16,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`min-h-screen ${inter.className}`}>{children}</body>
+      <body className={`min-h-screen ${inter.className}`}>
+        <nav className="flex items-center justify-between w-full mb-5 p-5 ">
+          <Image
+            src="https://cataas.com/cat/blue/says/:Meow?fontSize=30&fontColor=:blue"
+            alt="Logo"
+            width={50}
+            height={50}
+            className="cursor-pointer"
+          />
+          <div className="flex items-center space-x-4">
+            <button className="btn">Sign In</button>
+            <button className="btn btn-primary">Sign Up</button>
+          </div>
+        </nav>
+        {children}
+      </body>
     </html>
   );
 }

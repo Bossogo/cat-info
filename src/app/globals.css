@@ -11,19 +11,33 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-start-rgb: 15, 23, 42;
+    --background-end-rgb: 255, 255, 255;
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(45deg, darkred, darkblue)
+}
+
+.cat-image-wrapper {
+  position: relative;
+}
+
+.cat-image-wrapper::before {
+  align-items: center;
+  content: 'image is loading';
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+  z-index: 0;
+}
+
+.cat-image-wrapper img {
+  position: relative;
+  z-index: 1;
 }
 
 @layer utilities {

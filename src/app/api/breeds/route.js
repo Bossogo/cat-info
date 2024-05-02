@@ -1,9 +1,20 @@
 import axios from 'axios';
 
-const headers = new Headers({
+const headers = {
     "x-api-key": process.env.CAT_API_KEY
-  });
+  };
 
+  export async function GET(req) {
+    try {
+        const response = await axios.get(`${process.env.BASE_API_URL}/breeds`,{
+            headers,
+        });
+        const data = await response.data;
+        return Response.json(data)
+      } catch (error) {
+        return Response.json({ error: 'Error fetching cat breeds:'+ error})
+      }
+}
 
 export const searchBreed = async (query) => {
     try{
@@ -15,7 +26,6 @@ export const searchBreed = async (query) => {
     } catch{
         console.error('Error fetching cat image:', error);
         return [];
-    
     }
 }
 
@@ -24,7 +34,7 @@ export const fetchBreedList = async () => {
       const response = await axios.get('https://api.thecatapi.com/v1/breeds', {
         headers: headers,
       });
-      data = await response.data;
+      const data = await response.data;
       return data;
     } catch (error) {
       console.error('Error fetching cat breeds:', error);

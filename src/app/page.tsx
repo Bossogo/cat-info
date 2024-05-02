@@ -1,23 +1,91 @@
+'use client'
 import Image from "next/image";
-import CatImageGenerator from "./components/CatImageGenerator";
+import CatInfoManager from "./components/CatInfoManager";
 import "./CatImagePage.css"
+import { useState, useEffect, use } from "react";
+import CatDetail from "./components/CatDetail";
+import axios from "axios";
+import { ReadonlyURLSearchParams, useSearchParams, useRouter } from "next/navigation";
+ 
+type BreedInfo = {
+  id: string;
+  name: string;
+  description: string;
+  temperament: string;
+  origin: string;
+  life_span: string;
+  wikipedia_url: string;
+  image: {
+    width: number;
+    height: number;
+    url: string;
+  };
+};
+
 export default function Home() {
+  const searchParams : ReadonlyURLSearchParams  = useSearchParams();
+  const router = useRouter()
+
+  const [breedData, setBreedData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const s = searchParams.get('breed') || null;
+  const [selectedBreed, setSelectedBreed] = useState(s || null);
+  const [selectedBreedInfo, setSelectedBreedInfo] = useState<BreedInfo | null>();
+  /* const [breedInfo, setbreedInfo] = useState({
+    id: "",
+    name: "",
+    description: "",
+    temperament: "",
+    origin: "",
+    life_span: "",
+    wikipedia_url: "",
+    image: {
+      url: "",
+    },
+  }); */
+
+  const onInfoHandler = (info: string) => {
+    router.push(`/?breed=${info}`)
+  };
+
+  async function fetchBreeds(){
+    axios.get(`/api/breeds`)
+    .then(response => {
+      setBreedData(response.data);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error("Error fetching breeds:", error);
+    });
+    //setQueriedBreed([...breedNames])
+  }
+
+  useEffect(() => {
+    fetchBreeds()    
+  },[])
+
+  useEffect(() => {
+      setSelectedBreed(s);
+  },[s]);
+
+  useEffect(() => {
+    if(selectedBreed){
+      setSelectedBreedInfo(
+        breedData?.find((breed: { name: string }) => breed.name === selectedBreed)
+      );
+    }else{
+      setSelectedBreedInfo(null);
+    }
+    
+  },[breedData, selectedBreed]);
+
+
   return (
-    <main className="flex flex-col items-center justify-between bg-slate-900">
-      <nav className="flex items-center justify-between w-full mb-5 p-5 bg-slate-950">
-        <Image
-          src="https://cataas.com/cat/blue/says/:Meow?fontSize=30&fontColor=:blue"
-          alt="Logo"
-          width={100}
-          height={100}
-          className="cursor-pointer"
-        />
-        <div className="flex items-center space-x-4">
-          <button className="btn">Sign In</button>
-          <button className="btn btn-primary">Sign Up</button>
-        </div>
-      </nav>
-      <CatImageGenerator />
-    </main>
+    <>
+      <main className="flex flex-col items-center">
+        {!selectedBreed && <CatInfoManager data={breedData} onInfo={onInfoHandler} loading={loading}/>}
+        {!!selectedBreed && selectedBreedInfo && <CatDetail breedInfo={selectedBreedInfo} />}
+      </main>
+    </>
   );
 }
