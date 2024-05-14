@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-import breedRating from '../../../models/breedRating';
-import connectMongoDB from '../../../libs/connect'
+import breedRating from '../../../../models/breedRating'
+import connectMongoDB from '../../../../libs/connect'
 
 
 type BreedProps = {
@@ -22,8 +21,17 @@ type BreedProps = {
     }
 }
 
-const BreedInfo = ({breedInfo} : BreedProps) => {
-    const { id, name, description, temperament, origin, life_span, wikipedia_url, image } = breedInfo;
+const BreedInfo = async (params : any) => {
+    console.log(params)
+    let name, description, temperament, origin, life_span, wikipedia_url, image = ""
+    /* try {
+        const breedInfo = await fetch("../api/breeds").then(x => x.json()).then(y => y.data)
+        let { name, description, temperament, origin, life_span, wikipedia_url, image } = breedInfo;
+    
+    } catch (error) {
+        console.log(error)
+    } */
+
     let rating = 4;
     /* try{
         await connectMongoDB();
@@ -57,7 +65,7 @@ const BreedInfo = ({breedInfo} : BreedProps) => {
 
         </div>
         <div className='cat-image'>
-            <Link href={wikipedia_url}>
+            {/* <Link href={wikipedia_url}>
         
                 <div className="cat-image-wrapper">
                     <Image
@@ -68,7 +76,7 @@ const BreedInfo = ({breedInfo} : BreedProps) => {
                         className='cursor-pointer'
                     />
                 </div>
-            </Link>
+            </Link> */}
         </div>
     </>
   )

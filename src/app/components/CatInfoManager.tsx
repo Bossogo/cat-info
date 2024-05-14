@@ -36,7 +36,11 @@ const CatInfoManager = ({onInfo, data, loading}:CafInfoManagerProps) => {
   }
 
   useEffect(() => {
-    setBreedNames(breeds.map((breed: { name: string, id: string }) => ({name: breed.name, id: breed.id})))
+    if(breeds)
+      setBreedNames(breeds.map((breed: { name: string, id: string }) => ({name: breed.name, id: breed.id})))
+    else setBreedNames([
+      {name: "Failed to Load", id:"Error"}
+    ])
   },[breeds])
 
   useEffect(() => {
@@ -51,8 +55,8 @@ const CatInfoManager = ({onInfo, data, loading}:CafInfoManagerProps) => {
             <div className="label">
               <span className="label-text">Pick your breed of interest</span>
             </div>
-            <select ref={selectBreedRef} name='cat-breed-list' onChange={handleSelection} className="select select-bordered select-error bg-transparent max-w-xs mr-3" disabled={loading?true:false}>
-              <option className='hidden' selected disabled>
+            <select ref={selectBreedRef} defaultValue='' name='cat-breed-list' onChange={handleSelection} className="select select-bordered select-error bg-transparent max-w-xs mr-3" disabled={loading?true:false}>
+              <option className='to-hide' value='' disabled>
                  {loading ? "Loading..." : "Select a breed"}
               </option>
                 {breedNames.map((breedName: BreedName) => {

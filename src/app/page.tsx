@@ -2,7 +2,7 @@
 import Image from "next/image";
 import CatInfoManager from "./components/CatInfoManager";
 import "./CatImagePage.css"
-import { useState, useEffect, use } from "react";
+import { useState, useEffect} from "react";
 import CatDetail from "./components/CatDetail";
 import axios from "axios";
 import { ReadonlyURLSearchParams, useSearchParams, useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ type BreedInfo = {
   };
 };
 
-export default function Home() {
+export default function Home(props : any, params : any) {
   const searchParams : ReadonlyURLSearchParams  = useSearchParams();
   const router = useRouter()
 
@@ -45,7 +45,9 @@ export default function Home() {
   }); */
 
   const onInfoHandler = (info: string) => {
-    router.push(`/?breed=${info}`)
+    if(info)
+      router.push(`/?breed=${info}`)
+    else return;
   };
 
   async function fetchBreeds(){
@@ -62,6 +64,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchBreeds()    
+    console.log(params)
   },[])
 
   useEffect(() => {
